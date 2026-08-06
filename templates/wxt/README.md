@@ -36,6 +36,8 @@ A modern browser extension template with sidepanel support, built with WXT + Tai
 ```bash
 npm create sidepanel-extension@latest my-extension
 # or
+npx create-sidepanel-extension@latest my-extension
+# or
 pnpm create sidepanel-extension my-extension
 
 cd my-extension

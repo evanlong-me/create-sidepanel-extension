@@ -7,6 +7,8 @@ Scaffold a browser sidepanel extension with Tailwind CSS 4 + shadcn/ui — pick 
 ```bash
 npm create sidepanel-extension@latest my-extension
 # or
+npx create-sidepanel-extension@latest my-extension
+# or
 pnpm create sidepanel-extension my-extension
 ```
 

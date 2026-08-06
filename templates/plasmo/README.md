@@ -29,19 +29,21 @@ A modern browser extension template with sidepanel support, built with Plasmo + 
 ```bash
 npm create sidepanel-extension@latest my-extension
 # or
+npx create-sidepanel-extension@latest my-extension
+# or
 pnpm create sidepanel-extension my-extension
 
 cd my-extension
 ```
 
-**Option B: GitHub template**
+**Option B: Download directly**
 
-Click **Use this template** → **Create a new repository** on the
-[repository page](https://github.com/evanlong-me/sidepanel-extension-template),
-then clone your new repo. Or clone this repo directly:
+Grab just this template from the
+[create-sidepanel-extension](https://github.com/evanlong-me/create-sidepanel-extension)
+monorepo:
 
 ```bash
-git clone https://github.com/evanlong-me/sidepanel-extension-template.git my-extension
+pnpm dlx giget gh:evanlong-me/create-sidepanel-extension/templates/plasmo my-extension
 cd my-extension
 ```
 

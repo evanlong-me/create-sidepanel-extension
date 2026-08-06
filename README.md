@@ -42,7 +42,7 @@ Every template ships the same product: a sidepanel that opens when you click the
 ## Repository layout
 
 ```
-├── bin/cli.mjs       # The CLI (published to npm as create-sidepanel-extension)
+├── bin/cli.js        # The CLI (published to npm as create-sidepanel-extension)
 └── templates/
     ├── wxt/          # WXT + shadcn/ui template
     └── plasmo/       # Plasmo + shadcn/ui template

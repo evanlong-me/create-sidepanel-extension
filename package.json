@@ -4,7 +4,7 @@
   "description": "Scaffold a browser sidepanel extension with shadcn/ui — pick WXT or Plasmo as the framework",
   "type": "module",
   "bin": {
-    "create-sidepanel-extension": "./bin/cli.mjs"
+    "create-sidepanel-extension": "./bin/cli.js"
   },
   "files": [
     "bin"

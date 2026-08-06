@@ -161,9 +161,9 @@ See the [Plasmo docs](https://docs.plasmo.com/framework/workflows/build) for det
 
 ## License
 
-This project is licensed under the Apache License 2.0 - see the [LICENSE](LICENSE) file for details.
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-Apache-2.0 License - feel free to use this template for your projects!
+MIT License - feel free to use this template for your projects!
 
 ## Contributing
 

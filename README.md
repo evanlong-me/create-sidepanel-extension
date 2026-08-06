@@ -73,4 +73,4 @@ git push --follow-tags
 
 ## License
 
-Apache-2.0 — see [LICENSE](LICENSE).
+MIT — see [LICENSE](LICENSE).

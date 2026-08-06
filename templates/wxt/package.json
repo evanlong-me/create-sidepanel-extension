@@ -3,6 +3,7 @@
   "description": "A modern browser extension template with sidepanel support, built with WXT + Tailwind CSS 4.0 + shadcn/ui",
   "private": true,
   "version": "1.0.0",
+  "license": "MIT",
   "type": "module",
   "scripts": {
     "dev": "wxt",

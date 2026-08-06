@@ -1,6 +1,6 @@
 {
   "name": "create-sidepanel-extension",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Scaffold a browser sidepanel extension with shadcn/ui — pick WXT or Plasmo as the framework",
   "type": "module",
   "bin": {

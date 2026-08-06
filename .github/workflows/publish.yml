@@ -1,0 +1,122 @@
+name: Publish Package and Create Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      packages: write
+      id-token: write
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          # npm 12 is engine-incompatible with this Node version; keep the pair in sync
+          node-version: '22.17.0'
+
+      - name: Get version from tag
+        id: version
+        run: echo "version=${GITHUB_REF#refs/tags/v}" >> $GITHUB_OUTPUT
+
+      - name: Verify package.json version matches tag
+        run: |
+          PKG_VERSION=$(node -p "require('./package.json').version")
+          TAG_VERSION=${{ steps.version.outputs.version }}
+          if [ "$PKG_VERSION" != "$TAG_VERSION" ]; then
+            echo "❌ Version mismatch: package.json ($PKG_VERSION) != tag ($TAG_VERSION)"
+            exit 1
+          fi
+          echo "✅ Version verified: $PKG_VERSION"
+
+      - name: Upgrade npm (needed for OIDC provenance)
+        run: npm install -g npm@11
+
+      - name: Install dependencies
+        # No lockfile by design (lockfile=false), so npm ci is not an option
+        run: npm install
+
+      - name: Check if this version is already on npm
+        id: npm
+        run: |
+          PKG_NAME=$(node -p "require('./package.json').name")
+          if npm view "$PKG_NAME@${{ steps.version.outputs.version }}" version 2>/dev/null; then
+            echo "exists=true" >> $GITHUB_OUTPUT
+          else
+            echo "exists=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Publish to npm
+        # Skipped when the version already exists (e.g. the very first release was
+        # published manually before trusted publishing was configured on npmjs.com)
+        if: steps.npm.outputs.exists == 'false'
+        run: npm publish --provenance --access public
+
+      - name: Setup Node.js for GitHub Packages
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22.17.0'
+          registry-url: 'https://npm.pkg.github.com'
+
+      - name: Configure package for GitHub Packages
+        run: |
+          cp package.json package.json.backup
+          node -e "
+            const pkg = require('./package.json');
+            pkg.name = '@evanlong-me/create-sidepanel-extension';
+            pkg.publishConfig = { registry: 'https://npm.pkg.github.com' };
+            require('fs').writeFileSync('package.json', JSON.stringify(pkg, null, 2));
+          "
+
+      - name: Publish to GitHub Packages
+        run: npm publish --registry=https://npm.pkg.github.com
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Restore original package.json
+        if: always()
+        run: mv package.json.backup package.json
+
+      - name: Generate changelog
+        id: changelog
+        run: |
+          echo "changelog<<EOF" >> $GITHUB_OUTPUT
+          PREV_TAG=$(git describe --tags --abbrev=0 HEAD~1 2>/dev/null || echo "")
+          # Filter out version-bump commits so release notes carry no version numbers
+          if [ -n "$PREV_TAG" ]; then
+            git log --pretty=format:"- %s" $PREV_TAG..HEAD | grep -vE '^- (v?[0-9]+\.[0-9]+\.[0-9]+|Bump version to |chore: (release|set version))' >> $GITHUB_OUTPUT || true
+          else
+            git log --pretty=format:"- %s" -10 | grep -vE '^- (v?[0-9]+\.[0-9]+\.[0-9]+|Bump version to |chore: (release|set version))' >> $GITHUB_OUTPUT || true
+          fi
+          echo "" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: v${{ steps.version.outputs.version }}
+          name: Release v${{ steps.version.outputs.version }}
+          body: |
+            ## Changes
+
+            ${{ steps.changelog.outputs.changelog }}
+
+            ## Usage
+
+            ```bash
+            npm create sidepanel-extension@latest my-extension
+            # or
+            pnpm create sidepanel-extension my-extension
+            ```
+          draft: false
+          prerelease: false

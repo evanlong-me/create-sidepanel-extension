@@ -62,6 +62,15 @@ pnpm install && pnpm build    # the Plasmo template is standalone (own pnpm work
 
 Dependency updates (including the whole UI stack) are handled by Dependabot — see `.github/dependabot.yml`.
 
+## Releasing
+
+Releases are tag-triggered (see `.github/workflows/publish.yml`): bump the version, push the tag, and CI publishes to npm (OIDC trusted publishing) + GitHub Packages and creates the GitHub Release.
+
+```bash
+npm version <major|minor|patch>
+git push --follow-tags
+```
+
 ## License
 
 Apache-2.0 — see [LICENSE](LICENSE).

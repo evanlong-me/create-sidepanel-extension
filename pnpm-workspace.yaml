@@ -1,0 +1,3 @@
+packages:
+  - 'templates/wxt'
+lockfile: false

@@ -1,178 +1,67 @@
-# Sidepanel Extension Template
+# create-sidepanel-extension
 
-A modern browser extension template with sidepanel support, built with WXT + Tailwind CSS 4.0 + shadcn/ui.
+Scaffold a browser sidepanel extension with Tailwind CSS 4 + shadcn/ui — pick the framework you like.
 
-## Features
+## Usage
 
-- 🖥️ **Sidepanel Interface** - Click extension icon to open browser sidepanel
-- ⚡ **WXT Framework** - Next-generation Web Extension development framework
-- ⚛️ **React** - Modern UI framework with TypeScript support
-- 🎨 **Tailwind CSS 4.0** - Latest utility-first CSS framework
-- 🛠️ **shadcn/ui Ready** - Pre-configured for beautiful, accessible React components
-- 🌙 **Theme Management** - System/Light/Dark theme support
-- 💾 **Local Storage** - Persistent data storage with WXT Storage API
-- ⚙️ **Runtime Configuration** - Built-in runtime config system with type safety
-- 🔧 **TypeScript** - Full type safety and developer experience
-- 🎯 **Modern Development** - Hot reload, modern build tools
+```bash
+npm create sidepanel-extension@latest my-extension
+# or
+pnpm create sidepanel-extension my-extension
+```
+
+The CLI asks which framework to use, or you can pass it directly:
+
+```bash
+pnpm create sidepanel-extension my-extension --framework plasmo
+```
+
+Then:
+
+```bash
+cd my-extension
+pnpm install
+pnpm dev
+```
+
+Load the generated extension in `chrome://extensions` (Developer mode → Load unpacked).
+
+## Frameworks
+
+| Framework | Template | Notes |
+| --- | --- | --- |
+| [WXT](https://wxt.dev) | [`templates/wxt`](templates/wxt) | Vite-based, multi-browser (Chrome/Firefox/Edge/Safari) |
+| [Plasmo](https://www.plasmo.com) | [`templates/plasmo`](templates/plasmo) | React-first, batteries included |
+
+Every template ships the same product: a sidepanel that opens when you click the toolbar icon, shadcn/ui components on Tailwind CSS 4, system/light/dark theme support, persisted settings, and full TypeScript.
 
 ## Demo
 
-![Extension Demo](public/demo.gif)
+![Extension Demo](templates/wxt/public/demo.gif)
 
-*Watch how the sidepanel extension works: click the extension icon to open the sidepanel interface.*
-
-## Getting Started
-
-### Prerequisites
-
-- Node.js 18+
-- pnpm (recommended) or npm
-
-### Installation
-
-1. **Clone or use this template**
-   ```bash
-   git clone <repository-url>
-   cd sidepanel-extension-template
-   ```
-
-2. **Install dependencies**
-   ```bash
-   pnpm install
-   ```
-
-3. **Start development**
-   ```bash
-   pnpm dev
-   ```
-
-4. **Load extension in browser**
-   - Open `chrome://extensions/`
-   - Enable "Developer mode"
-   - Click "Load unpacked extension"
-   - Select the `.output/chrome-mv3` folder
-
-### Usage
-
-1. Click the extension icon in the browser toolbar
-2. The sidepanel will open on the right side
-3. Start customizing the template for your needs
-
-## Project Structure
+## Repository layout
 
 ```
-sidepanel-extension-template/
-├── entrypoints/           # Extension entry points
-│   ├── background.ts      # Background script
-│   ├── content.ts         # Content script (optional)
-│   └── sidepanel/         # Sidepanel UI
-│       ├── App.tsx        # Main React app
-│       ├── index.html     # HTML template
-│       └── main.tsx       # React entry point
-├── components/            # React components
-│   └── ui/                # shadcn/ui components
-├── lib/                   # Utility functions
-│   └── utils.ts           # Common utilities
-├── hooks/                 # Custom React hooks
-│   ├── use-theme.ts       # Theme management hook
-│   └── use-settings.ts    # Settings storage hook
-├── assets/                # Static assets
-├── public/                # Public assets (icons, etc.)
-├── app.config.ts          # Runtime configuration
-├── components.json        # shadcn/ui configuration
-├── wxt.config.ts          # WXT configuration
-└── package.json           # Dependencies and scripts
+├── bin/cli.mjs       # The CLI (published to npm as create-sidepanel-extension)
+└── templates/
+    ├── wxt/          # WXT + shadcn/ui template
+    └── plasmo/       # Plasmo + shadcn/ui template
 ```
 
-## Adding shadcn/ui Components
+Templates are downloaded from GitHub at scaffold time (via [giget](https://github.com/unjs/giget)), so the npm package stays tiny and freshly scaffolded projects always match `main`.
 
-This template is pre-configured for shadcn/ui. To add components:
+## Developing this repo
 
 ```bash
-# Example: Add a button component
-pnpm dlx shadcn@latest add button
+pnpm install                  # installs the CLI and the WXT template (pnpm workspace)
+pnpm -r build                 # builds the WXT template
 
-# Example: Add a dialog component
-pnpm dlx shadcn@latest add dialog
+cd templates/plasmo
+pnpm install && pnpm build    # the Plasmo template is standalone (own pnpm workspace)
 ```
 
-The components will be automatically added to `components/ui/` with proper styling.
-
-## Development Commands
-
-```bash
-# Development mode with hot reload (Chrome by default)
-pnpm dev
-
-# Development for specific browsers
-pnpm dev:chrome
-pnpm dev:firefox
-pnpm dev:edge
-pnpm dev:safari
-
-# Build for production (Chrome by default)
-pnpm build
-
-# Build for specific browsers
-pnpm build:chrome
-pnpm build:firefox
-pnpm build:edge
-pnpm build:safari
-
-# Create extension zip files
-pnpm zip
-pnpm zip:chrome
-pnpm zip:firefox
-pnpm zip:edge
-pnpm zip:safari
-
-# Type checking
-pnpm compile
-```
-
-## Customization
-
-### Styling
-
-- Edit `assets/tailwind.css` for global styles
-- Modify theme colors in `components.json`
-- Tailwind CSS 4.0 configuration in `wxt.config.ts`
-
-### Extension Configuration
-
-- Update manifest permissions in `wxt.config.ts`
-- Modify extension metadata in `package.json`
-- Change icons in `public/icon/`
-
-### Sidepanel Content
-
-- Edit `entrypoints/sidepanel/App.tsx` for main UI
-- Add new routes/pages as needed
-- Extend with additional React components
-
-## Browser Support
-
-This extension supports all major browsers through WXT's universal browser compatibility:
-
-- ✅ **Chrome** (Manifest V3) - `pnpm dev:chrome`, `pnpm build:chrome`
-- ✅ **Firefox** (Manifest V2) - `pnpm dev:firefox`, `pnpm build:firefox`
-- ✅ **Edge** (Manifest V3) - `pnpm dev:edge`, `pnpm build:edge`
-- ✅ **Safari** (Manifest V2) - `pnpm dev:safari`, `pnpm build:safari`
-- ✅ **Other Chromium-based browsers** (Opera, Brave, etc.)
+Dependency updates (including the whole UI stack) are handled by Dependabot — see `.github/dependabot.yml`.
 
 ## License
 
-This project is licensed under the Apache License 2.0 - see the [LICENSE](LICENSE) file for details.
-
-Apache-2.0 License - feel free to use this template for your projects!
-
-## Contributing
-
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Submit a pull request
-
----
-
-Built with ❤️ using [WXT](https://wxt.dev), [Tailwind CSS](https://tailwindcss.com), and [shadcn/ui](https://ui.shadcn.com)
+Apache-2.0 — see [LICENSE](LICENSE).

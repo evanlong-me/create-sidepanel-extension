@@ -1,0 +1,11 @@
+# pnpm 11 requires an explicit allow/deny decision for dependency build
+# scripts. None of these need their install scripts to work (prebuilt
+# binaries ship as optional dependencies), so keep them denied.
+allowBuilds:
+  '@parcel/watcher': false
+  '@swc/core': false
+  esbuild: false
+  lmdb: false
+  msgpackr-extract: false
+  sharp: false
+lockfile: false
